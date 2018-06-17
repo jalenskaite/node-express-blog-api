@@ -1,12 +1,12 @@
 {
   "test": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/NodeExpressBlogApi",
+    "MONGODB_URI": "mongodb://localhost:27017/NodeExpressBlogApiTest",
     "JWT_SECRET": "vzxczcgsdfgxvzxvzcxfgsdd14545sad"
   },
   "development": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/NodeExpressBlogApiTest",
+    "MONGODB_URI": "mongodb://localhost:27017/NodeExpressBlogApi",
     "JWT_SECRET": "agtjiojm45gas435264fasdfvza"
   }
 }
