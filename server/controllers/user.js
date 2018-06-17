@@ -18,8 +18,15 @@ const create = (req, res) => {
   })
 }
 
-const login = (rq, res) => {
-  res.send('login user')
+const login = (req, res) => {
+  const body = pick(req.body, ['email', 'password'])
+  User.findByCredentials(body.email, body.password).then((user) => {
+    user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user)
+    })
+  }).catch((e) => {
+    res.status(400).send()
+  })
 }
 
 const logout = (rq, res) => {
