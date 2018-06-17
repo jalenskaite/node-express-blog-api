@@ -1,0 +1,32 @@
+{
+  "name": "node-express-blog-api",
+  "version": "1.0.0",
+  "description": "Simple Node Express blog api",
+  "main": "dist",
+  "scripts": {
+    "start": "node -r esm server/server.js",
+    "dev": "nodemon -r esm server/server.js",
+    "lint": "eslint server/**/*.js",
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha -r esm server/**/*.test.js",
+    "test-watch": "nodemon --exec \"yarn test\""
+  },
+  "repository": "https://github.com/jalenskaite/node-express-blog-api.git",
+  "author": "Sigita Alenskaite",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "expect": "^23.1.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.5",
+    "supertest": "^3.1.0"
+  },
+  "dependencies": {
+    "esm": "^3.0.51",
+    "express": "^4.16.3"
+  }
+}

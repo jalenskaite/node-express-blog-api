@@ -1,0 +1,50 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn
+
+PATH: 
+  /Library/Frameworks/Python.framework/Versions/3.6/bin:/Users/sigita/bin:~/.composer/vendor/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:./node_modules/.bin:/usr/local/mysql/bin
+
+Yarn version: 
+  1.6.0
+
+Node version: 
+  8.9.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/sigita/Desktop/node-express-blog-api/package.json: Unexpected token } in JSON at position 234
+      at JSON.parse (<anonymous>)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:1130:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:109:13
+      at <anonymous>
+
+npm manifest: 
+  {
+    "name": "node-express-blog-api",
+    "version": "1.0.0",
+    "description": "Simple Node Express blog api",
+    "main": "dist",
+    "scripts": {
+      "start": "node -r esm server/server.js",
+      "dev": "nodemon -r esm server/server.js",
+    },
+    "repository": "https://github.com/jalenskaite/node-express-blog-api.git",
+    "author": "Sigita Alenskaite",
+    "license": "MIT",
+    "devDependencies": {
+      "nodemon": "^1.17.5",
+    },
+    "dependencies": {
+      "esm": "^3.0.51",
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
