@@ -1,4 +1,5 @@
-// import {Post} from './../models/post'
+import {Post} from './../models/post'
+import pick from 'lodash.pick'
 
 const get = (req, res) => {
   res.send('get me post')
@@ -13,7 +14,18 @@ const getOne = (req, res) => {
 }
 
 const create = (req, res) => {
-  res.send('create posts')
+  const body = pick(req.body, ['text', 'title'])
+
+  const todo = new Post({
+    _creator: req.user._id,
+    ...body
+  })
+
+  todo.save().then((doc) => {
+    res.send(doc)
+  }, (e) => {
+    res.status(400).send(e)
+  })
 }
 
 const update = (req, res) => {
