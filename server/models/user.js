@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
       message: `{VALUE} is not a valid email`
     }
   },
+  role: {
+    type: String,
+    default: 'user'
+  },
   password: {
     type: String,
     required: true,
