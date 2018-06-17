@@ -1,8 +1,8 @@
 import {User} from './../models/user'
 import pick from 'lodash.pick'
 
-const get = (rq, res) => {
-  res.send('get user')
+const get = (req, res) => {
+  res.send(req.user)
 }
 
 const create = (req, res) => {
