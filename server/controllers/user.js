@@ -29,8 +29,12 @@ const login = (req, res) => {
   })
 }
 
-const logout = (rq, res) => {
-  res.send('logout user')
+const logout = (req, res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send()
+  }, () => {
+    res.status(400).send()
+  })
 }
 
 export {get, create, login, logout}
