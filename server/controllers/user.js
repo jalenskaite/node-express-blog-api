@@ -1,9 +1,21 @@
+import {User} from './../models/user'
+import pick from 'lodash.pick'
+
 const get = (rq, res) => {
   res.send('get user')
 }
 
-const create = (rq, res) => {
-  res.send('create user')
+const create = (req, res) => {
+  const body = pick(req.body, ['email', 'password'])
+  const user = new User(body)
+
+  user.save().then(() => {
+    return user.generateAuthToken()
+  }).then((token) => {
+    res.status(200).header('x-auth', token).send(user)
+  }).catch((e) => {
+    res.status(400).send()
+  })
 }
 
 const login = (rq, res) => {
