@@ -32,4 +32,4 @@ const populateUsers = (done) => {
   }).then(() => done())
 }
 
-export {users, populateUsers}
+export {users, populateUsers, userOneId, userTwoId}
