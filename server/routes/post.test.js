@@ -5,7 +5,7 @@ import app from './../server'
 // import {User} from './../models/user'
 import {Post} from './../models/post'
 import {users, populateUsers} from './../seed/test/user'
-import {populatePosts} from './../seed/test/post'
+import {posts, populatePosts} from './../seed/test/post'
 
 const prefix = '/api'
 
@@ -53,5 +53,47 @@ describe(`POST ${prefix}/posts`, () => {
           done()
         }).catch((e) => done(e))
       })
+  })
+})
+
+describe(`GET ${prefix}/posts`, () => {
+  it('should get posts', (done) => {
+    request(app)
+      .get(`${prefix}/posts`)
+      .expect(200)
+      .end((err) => {
+        if (err) {
+          return done(err)
+        }
+
+        Post.find().then((posts) => {
+          expect(posts.length).toBeLessThan(11)
+          done()
+        }).catch((e) => done(e))
+      })
+  })
+
+  it('should skip and get limitted list with params ', (done) => {
+    request(app)
+      .get(`${prefix}/posts`)
+      .query({limit: 1, start: 1})
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.length).toBe(1)
+        expect(res.body[0].text).toBe(posts[1].text)
+      })
+      .end(done)
+  })
+
+  it('should default params overide invalid params ', (done) => {
+    request(app)
+      .get(`${prefix}/posts`)
+      .query({limit: 'fsd', start: 'fff'})
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.length).toBeGreaterThan(1)
+        expect(res.body[0].text).toBe(posts[0].text)
+      })
+      .end(done)
   })
 })
