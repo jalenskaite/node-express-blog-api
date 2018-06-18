@@ -1,12 +1,17 @@
 import {Post} from './../models/post'
 import pick from 'lodash.pick'
+import findList from './../helpers/findList'
 
 const get = (req, res) => {
   res.send('get me post')
 }
 
 const getAll = (req, res) => {
-  res.send('get all posts')
+  const params = pick(req.query, ['start', 'limit'])
+
+  findList(params, {}, Post)
+    .then((posts) => res.send(posts))
+    .catch((err) => res.status(404).send([]))
 }
 
 const getOne = (req, res) => {

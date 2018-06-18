@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
-const Post = mongoose.model('Post', {
+
+const PostSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
@@ -21,5 +22,7 @@ const Post = mongoose.model('Post', {
     required: true
   }
 })
+
+const Post = mongoose.model('Post', PostSchema)
 
 export {Post}
