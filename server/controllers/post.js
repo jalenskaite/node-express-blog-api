@@ -5,11 +5,10 @@ import findList from './../helpers/findList'
 
 const get = (req, res) => {
   const params = pick(req.query, ['start', 'limit'])
-  console.log('parmas', params)
-  findList({}, {
+  findList(params, {
     _creator: req.user._id
   }, Post)
-    .then((posts) => res.send(posts))
+    .then((posts) => res.send({posts}))
     .catch((err) => res.status(404).send([]))
 }
 

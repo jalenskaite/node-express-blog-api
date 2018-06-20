@@ -221,3 +221,25 @@ describe(`DELETE ${prefix}/posts/:id`, () => {
       .end(done)
   })
 })
+
+describe(`GET ${prefix}/posts/me`, () => {
+  it('should get all user posts', (done) => {
+    request(app)
+      .get(`${prefix}/posts/me`)
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.posts.length).toBe(1)
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err)
+        }
+
+        Post.find().then((posts) => {
+          expect(posts.length).toBe(2)
+          done()
+        }).catch((e) => done(e))
+      })
+  })
+})
