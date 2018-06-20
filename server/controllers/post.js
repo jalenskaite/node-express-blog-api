@@ -1,5 +1,6 @@
-import {Post} from './../models/post'
 import pick from 'lodash.pick'
+import {ObjectID} from 'mongodb'
+import {Post} from './../models/post'
 import findList from './../helpers/findList'
 
 const get = (req, res) => {
@@ -15,7 +16,18 @@ const getAll = (req, res) => {
 }
 
 const getOne = (req, res) => {
-  res.send('get one posts')
+  const id = req.params.id
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send()
+  }
+  Post.findOne({
+    _id: id
+  }).then((post) => {
+    if (!post) {
+      return res.status(404).send()
+    }
+    return res.status(200).send({post})
+  }).catch((e) => res.status(400).send())
 }
 
 const create = (req, res) => {
