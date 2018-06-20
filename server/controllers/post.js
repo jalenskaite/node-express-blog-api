@@ -46,7 +46,27 @@ const create = (req, res) => {
 }
 
 const update = (req, res) => {
-  res.send('update posts')
+  const id = req.params.id
+  const body = pick(req.body, ['text', 'title'])
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send()
+  }
+
+  Post.findOneAndUpdate({
+    _id: id,
+    _creator: req.user._id
+  }, {
+    $set: body
+  }, {new: true}).then((post) => {
+    if (!post) {
+      return res.status(404).send()
+    }
+
+    res.status(200).send({post})
+  }).catch((e) => {
+    res.status(400).send()
+  })
 }
 
 const remove = (req, res) => {

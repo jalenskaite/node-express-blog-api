@@ -7,7 +7,7 @@ router.route('/').post(authenticate, create)
 router.route('/').get(getAll)
 router.route('/me').get(get)
 router.route('/:id').get(getOne)
-router.route('/:id').patch(update)
+router.route('/:id').patch(authenticate, update)
 router.route('/:id').delete(remove)
 
 export default router
