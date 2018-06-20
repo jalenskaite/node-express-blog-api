@@ -4,7 +4,13 @@ import {Post} from './../models/post'
 import findList from './../helpers/findList'
 
 const get = (req, res) => {
-  res.send('get me post')
+  const params = pick(req.query, ['start', 'limit'])
+  console.log('parmas', params)
+  findList({}, {
+    _creator: req.user._id
+  }, Post)
+    .then((posts) => res.send(posts))
+    .catch((err) => res.status(404).send([]))
 }
 
 const getAll = (req, res) => {
