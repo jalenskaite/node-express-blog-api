@@ -8,6 +8,6 @@ router.route('/').get(getAll)
 router.route('/me').get(get)
 router.route('/:id').get(getOne)
 router.route('/:id').patch(authenticate, update)
-router.route('/:id').delete(remove)
+router.route('/:id').delete(authenticate, remove)
 
 export default router

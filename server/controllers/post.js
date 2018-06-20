@@ -70,7 +70,19 @@ const update = (req, res) => {
 }
 
 const remove = (req, res) => {
-  res.send('delete posts')
+  const id = req.params.id
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send()
+  }
+  Post.findOneAndRemove({
+    _id: id,
+    _creator: req.user._id
+  }).then((post) => {
+    if (!post) {
+      return res.status(404).send()
+    }
+    return res.status(200).send({post})
+  }).catch((e) => res.status(400).send())
 }
 
 export {getAll, get, getOne, create, update, remove}
