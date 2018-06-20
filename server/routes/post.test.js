@@ -162,3 +162,62 @@ describe(`PATCH ${prefix}/posts/:id`, () => {
       .end(done)
   })
 })
+
+describe(`DELETE ${prefix}/posts/:id`, () => {
+  it('should remove the post', (done) => {
+    const hexId = posts[0]._id.toHexString()
+    request(app)
+      .delete(`${prefix}/posts/${hexId}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.post._id).toBe(hexId)
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err)
+        }
+
+        Post.findById(hexId).then((posts) => {
+          expect(posts).toBeFalsy()
+          done()
+        }).catch((e) => done(e))
+      })
+  })
+
+  it('should not remove the post for other user', (done) => {
+    const hexId = posts[0]._id.toHexString()
+    request(app)
+      .delete(`${prefix}/posts/${hexId}`)
+      .set('x-auth', users[1].tokens[0].token)
+      .expect(404)
+      .end((err, res) => {
+        if (err) {
+          return done(err)
+        }
+
+        Post.findById(hexId).then((posts) => {
+          expect(posts).toBeTruthy()
+          done()
+        }).catch((e) => done(e))
+      })
+  })
+
+  it('should return 404 if post not found', (done) => {
+    const id = new ObjectID()
+    request(app)
+      .delete(`${prefix}/posts/${id.toHexString()}`)
+      .set('x-auth', users[1].tokens[0].token)
+      .expect(404)
+      .end(done)
+  })
+
+  it('should return 404 if object id is not valid', (done) => {
+    const id = '123412sfdfasfasd'
+    request(app)
+      .delete(`${prefix}/posts/${id}`)
+      .set('x-auth', users[1].tokens[0].token)
+      .expect(404)
+      .end(done)
+  })
+})
