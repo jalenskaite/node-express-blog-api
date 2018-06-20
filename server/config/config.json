@@ -1,6 +1,6 @@
 {
   "test": {
-    "PORT": 3000,
+    "PORT": 3001,
     "MONGODB_URI": "mongodb://localhost:27017/NodeExpressBlogApiTest",
     "JWT_SECRET": "vzxczcgsdfgxvzxvzcxfgsdd14545sad"
   },
