@@ -3,6 +3,7 @@ import request from 'supertest'
 
 import app from './../server'
 // import {User} from './../models/user'
+import {ObjectID} from 'mongodb'
 import {Post} from './../models/post'
 import {users, populateUsers} from './../seed/test/user'
 import {posts, populatePosts} from './../seed/test/post'
@@ -94,6 +95,34 @@ describe(`GET ${prefix}/posts`, () => {
         expect(res.body.length).toBeGreaterThan(1)
         expect(res.body[0].text).toBe(posts[0].text)
       })
+      .end(done)
+  })
+})
+
+describe(`GET ${prefix}/posts/:id`, () => {
+  it('should return post doc', (done) => {
+    request(app)
+      .get(`${prefix}/posts/${posts[0]._id.toHexString()}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.post.text).toBe(posts[0].text)
+      })
+      .end(done)
+  })
+
+  it('should return 404 if post was not found', (done) => {
+    const id = new ObjectID()
+    request(app)
+      .get(`${prefix}/posts/${id.toHexString()}`)
+      .expect(404)
+      .end(done)
+  })
+
+  it('should return 404 for non-object ids', (done) => {
+    const id = '123412sfdfasfasd'
+    request(app)
+      .get(`/todos/${id}`)
+      .expect(404)
       .end(done)
   })
 })
