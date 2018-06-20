@@ -126,3 +126,39 @@ describe(`GET ${prefix}/posts/:id`, () => {
       .end(done)
   })
 })
+
+describe(`PATCH ${prefix}/posts/:id`, () => {
+  it('should update the post', (done) => {
+    const hexId = posts[0]._id.toHexString()
+    const text = 'Updated first post text'
+    const title = 'Updated first post title'
+    request(app)
+      .patch(`${prefix}/posts/${hexId}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .send({
+        title,
+        text
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.post.text).toBe(text)
+        expect(res.body.post.title).toBe(title)
+      })
+      .end(done)
+  })
+
+  it('should not update the post as other user', (done) => {
+    const hexId = posts[0]._id.toHexString()
+    const text = 'Updated first post text'
+    const title = 'Updated first post title'
+    request(app)
+      .patch(`${prefix}/posts/${hexId}`)
+      .set('x-auth', users[1].tokens[0].token)
+      .send({
+        title,
+        text
+      })
+      .expect(404)
+      .end(done)
+  })
+})
