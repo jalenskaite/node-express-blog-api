@@ -6,7 +6,7 @@ import findList from './../helpers/findList'
 const get = (req, res) => {
   const params = pick(req.query, ['start', 'limit'])
   findList(params, {}, Category)
-    .then((category) => res.send({category}))
+    .then((categories) => res.send({categories}))
     .catch((err) => res.status(404).send([]))
 }
 
@@ -23,8 +23,8 @@ const create = (req, res) => {
     ...body
   })
 
-  category.save().then((doc) => {
-    res.send(doc)
+  category.save().then((category) => {
+    res.send({category})
   }, (e) => {
     res.status(400).send(e)
   })
