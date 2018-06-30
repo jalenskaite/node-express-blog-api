@@ -1,13 +1,14 @@
 import {User} from './../models/user'
 
-const user = (req, res, next) => {
+const authenticate = (req, res, next) => {
   const token = req.header('x-auth')
   User.findByToken(token).then((user) => {
-    req.user = !user ? null : user
+    req.user = user
     next()
   }).catch((e) => {
     req.user = null
+    next()
   })
 }
 
-export default user
+export default authenticate
