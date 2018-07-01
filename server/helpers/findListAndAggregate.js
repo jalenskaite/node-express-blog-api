@@ -3,11 +3,14 @@ const defaultParams = {
   limit: 10
 }
 
-const findList = (params, query, model) => {
+const findListAndAggregate = (params, stages, model) => {
   const limit = (params.limit && !isNaN(params.limit)) ? parseInt(params.limit) : defaultParams.limit
   const skip = (params.start && !isNaN(params.start)) ? parseInt(params.start) : defaultParams.start
-
-  return model.find({...query}, {}, { skip, limit })
+  return model.aggregate([{
+    $skip: skip
+  },
+  {$limit: limit},
+  ...stages])
 }
 
-export default findList
+export default findListAndAggregate

@@ -15,9 +15,8 @@ const PostSchema = new mongoose.Schema({
     trim: true
   },
   categories: [],
-  comments: [],
   _creator: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true
   }
 })

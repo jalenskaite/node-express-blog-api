@@ -80,8 +80,8 @@ describe(`GET ${prefix}/posts`, () => {
       .query({limit: 1, start: 1})
       .expect(200)
       .expect((res) => {
-        expect(res.body.length).toBe(1)
-        expect(res.body[0].text).toBe(posts[1].text)
+        expect(res.body.posts.length).toBe(1)
+        expect(res.body.posts[0].text).toBe(posts[1].text)
       })
       .end(done)
   })
@@ -92,8 +92,8 @@ describe(`GET ${prefix}/posts`, () => {
       .query({limit: 'fsd', start: 'fff'})
       .expect(200)
       .expect((res) => {
-        expect(res.body.length).toBeGreaterThan(1)
-        expect(res.body[0].text).toBe(posts[0].text)
+        expect(res.body.posts.length).toBeGreaterThan(1)
+        expect(res.body.posts[0].text).toBe(posts[0].text)
       })
       .end(done)
   })

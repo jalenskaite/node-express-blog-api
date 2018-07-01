@@ -1,13 +1,43 @@
 import pick from 'lodash.pick'
-import {ObjectID} from 'mongodb'
+import {ObjectId} from 'mongodb'
 import {Post} from './../models/post'
-import findList from './../helpers/findList'
+import findListAndAggregate from './../helpers/findListAndAggregate'
 
 const get = (req, res) => {
   const params = pick(req.query, ['start', 'limit'])
-  findList(params, {
-    _creator: req.user._id
-  }, Post)
+  const stages = [
+    {$match: {_creator: req.user._id.toString()}},
+    {$lookup: {
+      from: 'comments',
+      localField: '_id',
+      foreignField: 'postId',
+      as: 'commentsCount'
+    }},
+    {$addFields: {
+      'commentsCount': {
+        $size: '$commentsCount'
+      }
+    }},
+    {$lookup: {
+      from: 'users',
+      localField: '_creator',
+      foreignField: '_id',
+      as: 'author'
+    }},
+    {$addFields: {
+      'author': '$author.email'
+    }},
+    {$project: {
+      _id: 0,
+      commentsCount: 1,
+      categories: 1,
+      title: 1,
+      text: 1,
+      author: { $arrayElemAt: [ '$author', 0 ] }
+    }}
+  ]
+
+  findListAndAggregate(params, stages, Post)
     .then((posts) => res.send({posts}))
     .catch((err) => res.status(404).send([]))
 }
@@ -15,14 +45,45 @@ const get = (req, res) => {
 const getAll = (req, res) => {
   const params = pick(req.query, ['start', 'limit'])
 
-  findList(params, {}, Post)
-    .then((posts) => res.send(posts))
+  const stages = [
+    {$lookup: {
+      from: 'comments',
+      localField: '_id',
+      foreignField: 'postId',
+      as: 'commentsCount'
+    }},
+    {$addFields: {
+      'commentsCount': {
+        $size: '$commentsCount'
+      }
+    }},
+    {$lookup: {
+      from: 'users',
+      localField: '_creator',
+      foreignField: '_id',
+      as: 'author'
+    }},
+    {$addFields: {
+      'author': '$author.email'
+    }},
+    {$project: {
+      _id: 0,
+      commentsCount: 1,
+      categories: 1,
+      title: 1,
+      text: 1,
+      author: { $arrayElemAt: [ '$author', 0 ] }
+    }}
+  ]
+
+  findListAndAggregate(params, stages, Post)
+    .then((posts) => res.send({posts}))
     .catch((err) => res.status(404).send([]))
 }
 
 const getOne = (req, res) => {
   const id = req.params.id
-  if (!ObjectID.isValid(id)) {
+  if (!ObjectId.isValid(id)) {
     return res.status(404).send()
   }
   Post.findOne({
@@ -54,7 +115,7 @@ const update = (req, res) => {
   const id = req.params.id
   const body = pick(req.body, ['text', 'title'])
 
-  if (!ObjectID.isValid(id)) {
+  if (!ObjectId.isValid(id)) {
     return res.status(404).send()
   }
 
@@ -76,7 +137,7 @@ const update = (req, res) => {
 
 const remove = (req, res) => {
   const id = req.params.id
-  if (!ObjectID.isValid(id)) {
+  if (!ObjectId.isValid(id)) {
     return res.status(404).send()
   }
   Post.findOneAndRemove({

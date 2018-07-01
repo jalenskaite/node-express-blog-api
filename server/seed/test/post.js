@@ -9,12 +9,12 @@ const posts = [{
   _id: postId1,
   text: 'First post text',
   title: 'First post title',
-  _creator: userOneId
+  _creator: userOneId.toString()
 }, {
   _id: postId2,
   text: 'Second post text',
   title: 'Second post title',
-  _creator: userTwoId
+  _creator: userTwoId.toString()
 }]
 
 const populatePosts = (done) => {
