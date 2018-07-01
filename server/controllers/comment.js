@@ -4,19 +4,22 @@ import {Comment} from './../models/comment'
 import findList from './../helpers/findList'
 
 const get = (req, res) => {
-  const params = pick(req.query, ['start', 'limit'])
-  const postId = req.query.postId ? {postId: req.query.postId} : {postId: null}
-  const _id = req.query._id ? {parentId: req.query._id} : {}
+  const params = pick(req.query, ['start', 'limit', 'postId'])
+
+  if (!req.query.postId) {
+    return res.status(404).send({comments: []})
+  }
+
+  const id = req.query.id ? {parentId: req.query.id} : {parentId: null}
 
   const query = {
     ...params,
-    ..._id,
-    ...postId
+    ...id
   }
 
   findList(params, query, Comment)
     .then((comments) => res.send({comments}))
-    .catch((err) => res.status(404).send([]))
+    .catch((err) => res.status(404).send({comments: []}))
 }
 
 const getMe = (req, res) => {
@@ -28,7 +31,7 @@ const getMe = (req, res) => {
 
   findList(params, query, Comment)
     .then((comments) => res.send({comments}))
-    .catch((err) => res.status(404).send([]))
+    .catch((err) => res.status(404).send({comments: []}))
 }
 
 const getAll = (req, res) => {
@@ -46,6 +49,10 @@ const getAll = (req, res) => {
 
 const create = (req, res) => {
   const body = pick(req.body, ['title', 'text', 'postId', 'parentId'])
+
+  if (!req.body.title || !req.body.text || !req.body.postId) {
+    return res.status(400).send()
+  }
 
   const creator = req.user ? {
     _creator: req.user._id
@@ -80,7 +87,7 @@ const remove = (req, res) => {
 
   Comment.findOneAndRemove(query).then((comment) => {
     if (!comment) {
-      return res.status(404).send()
+      return res.status(400).send()
     }
     return res.status(200).send({comment})
   }).catch((e) => res.status(400).send())

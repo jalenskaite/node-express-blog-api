@@ -2,13 +2,16 @@ import {ObjectID} from 'mongodb'
 import {userOneId, userTwoId} from './user'
 import {Post} from './../../models/post'
 
+const postId1 = new ObjectID()
+const postId2 = new ObjectID()
+
 const posts = [{
-  _id: new ObjectID(),
+  _id: postId1,
   text: 'First post text',
   title: 'First post title',
   _creator: userOneId
 }, {
-  _id: new ObjectID(),
+  _id: postId2,
   text: 'Second post text',
   title: 'Second post title',
   _creator: userTwoId
@@ -20,4 +23,4 @@ const populatePosts = (done) => {
   }).then(() => done())
 }
 
-export {posts, populatePosts}
+export {posts, populatePosts, postId1, postId2}

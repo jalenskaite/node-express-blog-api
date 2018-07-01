@@ -22,7 +22,8 @@ const CommentSchema = new mongoose.Schema({
     required: true
   },
   parentId: {
-    type: mongoose.Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    default: null
   }
 })
 

@@ -6,7 +6,7 @@ const user = (req, res, next) => {
     req.user = !user ? null : user
     next()
   }).catch((e) => {
-    req.user = null
+    res.status(401).send()
   })
 }
 
